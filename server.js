@@ -52,7 +52,10 @@ const app = http.createServer((request, response) => {
 	}
 });
 
-app.listen(3000);
+app.listen(3000, (err)=>{
+	if(err) console.error(err.message);
+	else console.log("server running at port: 3000");
+});
 
 /*
  * $ node server.js
