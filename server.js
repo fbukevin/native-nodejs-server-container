@@ -1,5 +1,18 @@
 const url = require('url');
 const http = require('http');
+
+/* configure logger */
+const winston = require('winston')
+const logger = winston.createLogger({
+  level: 'info',
+  format: winston.format.json(),
+  transports: [
+  	new winston.transports.File({ filename: 'access.log', level: 'info' })
+  ]
+});
+
+
+
 const app = http.createServer((request, response) => {
 	var method = request.method;
 	var path = request.url.split('?')[0];
@@ -9,6 +22,7 @@ const app = http.createServer((request, response) => {
 	if(method == 'GET'){
 		switch(path){
 			case '/':
+				logger.info('Access root path;')
 				response.writeHead(200, {"Content-Type": "text/html"});
 				response.write('<h1>Hello world!</h1>');
 				response.end();
@@ -52,7 +66,10 @@ const app = http.createServer((request, response) => {
 	}
 });
 
-app.listen(3000);
+app.listen(3000, (err)=>{
+	if(err) console.error(err.message);
+	else console.log("server running at port: 3000");
+});
 
 /*
  * $ node server.js
