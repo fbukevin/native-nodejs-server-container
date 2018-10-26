@@ -1,17 +1,6 @@
 const url = require('url');
 const http = require('http');
-
-/* configure logger */
-const winston = require('winston')
-const logger = winston.createLogger({
-  level: 'info',
-  format: winston.format.json(),
-  transports: [
-  	new winston.transports.File({ filename: '/var/log/custom/access.log', level: 'info' })
-  ]
-});
-
-
+const fs = require('fs');
 
 const app = http.createServer((request, response) => {
 	var method = request.method;
@@ -22,7 +11,10 @@ const app = http.createServer((request, response) => {
 	if(method == 'GET'){
 		switch(path){
 			case '/':
-				logger.info('Access root path;')
+				fs.readFile('/var/log/custom/log1/access.log', (err, data) => {
+				  if (err) throw err;
+				  console.log(data);
+				});
 				response.writeHead(200, {"Content-Type": "text/html"});
 				response.write('<h1>Hello world!</h1>');
 				response.end();
